@@ -74,20 +74,6 @@ The model classifies skin lesions into the following 8 categories:
 - http://127.0.0.1:5000/
 6. **Upload an Image**: Use the upload form to submit a skin lesion image and view the predictions.
 
-### File Structure
-
-project/
-├── app.py                   # Flask application script
-├── templates/               # HTML templates for the web interface
-│   ├── index.html           # Home page
-│   ├── about.html           # About page
-│   ├── result.html          # Result page for predictions
-├── static/                  # Static files (CSS, images, etc.)
-│   ├── images/              # Example images for disease information
-├── best_model1_lora.pth     # LoRA fine-tuned model
-├── best_model_adapter.pth   # Adapter fine-tuned model
-├── requirements.txt         # Python dependencies
-
 
 ### Dependencies
 Install all dependencies using the following command:
