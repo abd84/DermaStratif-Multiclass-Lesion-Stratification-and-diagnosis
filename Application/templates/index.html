@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DermaStratif</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f6f9;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 50px auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            color: #000000;
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: #555;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        form label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        form input[type="file"] {
+            margin-bottom: 20px;
+        }
+
+        form button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        form button:hover {
+            background-color: #45a049;
+        }
+
+        .disease-info {
+            margin-top: 40px;
+            padding: 20px;
+            background: linear-gradient(135deg, #ffffff, #f9f9f9);
+            border-radius: 10px;
+            text-align: left;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .disease-info h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            color: #000000;
+        }
+
+        .disease-info ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .disease-info ul li {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: rgba(76, 175, 80, 0.1);
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+        }
+
+        .disease-info ul li img {
+            width: 100px;
+            height: 100px;
+            margin-right: 20px;
+            border-radius: 8px;
+            object-fit: cover;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .disease-info ul li strong {
+            font-size: 18px;
+            color: #333;
+        }
+
+        .disease-info ul li em {
+            font-size: 14px;
+            color: #4CAF50;
+            display: block;
+            margin-top: 5px;
+        }
+
+        .disease-info ul li span {
+            display: block;
+            margin-top: 5px;
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>DermaStratif: Multiclass Lesion Stratification and diagnosis</h1>
+        <p>Upload an image of a skin lesion to predict the disease.</p>
+        <form action="/predict" method="post" enctype="multipart/form-data">
+            <label for="file">Choose an image:</label>
+            <input type="file" name="file" id="file" accept="image/*" required>
+            <button type="submit">Predict</button>
+        </form>
+        <br>
+    <!-- Add the button for the new page -->
+    <button onclick="window.location.href='/about'">About the Model</button>
+    </div>
+
+    <!-- Disease Information Section -->
+    <div class="container disease-info">
+        <h2>Skin Disease Information</h2>
+        <ul>
+            <li>
+                <img src="/static/images/melanoma.png" alt="Melanoma">
+                <div>
+                    <strong>Melanoma:</strong> A dangerous type of skin cancer originating in melanocytes. 
+                    <em>Severity: High</em>
+                    <span>Melanoma is the most dangerous form of skin cancer and can spread to other parts of the body if not detected early. Early diagnosis and treatment are critical.</span>
+                </div>
+            </li>
+            <li>
+                <img src="/static/images/Melanocytic Nevus.png" alt="Melanocytic Nevus">
+                <div>
+                    <strong>Melanocytic Nevus:</strong> Commonly known as a mole, usually benign.
+                    <em>Severity: Low</em>
+                    <span>Generally harmless, but some moles can develop into melanoma. Any changes in size, shape, or color should be monitored.</span>
+                </div>
+            </li>
+            <li>
+                <img src="/static/images/Basal Cell Carcinoma.png" alt="Basal Cell Carcinoma">
+                <div>
+                    <strong>Basal Cell Carcinoma (BCC):</strong> The most common skin cancer, rarely spreads.
+                    <em>Severity: Moderate</em>
+                    <span>It grows slowly and rarely spreads but can cause significant local damage if left untreated. Often associated with sun exposure.</span>
+                </div>
+            </li>
+            <li>
+                <img src="/static/images/Actinic Keratosis.png" alt="Actinic Keratosis">
+                <div>
+                    <strong>Actinic Keratosis:</strong> Precancerous scaly patches caused by sun exposure.
+                    <em>Severity: Moderate to High</em>
+                    <span>If untreated, it can develop into squamous cell carcinoma. Early treatment is recommended.</span>
+                </div>
+            </li>
+            <li>
+                <img src="/static/images/Benign Keratosis.png" alt="Benign Keratosis">
+                <div>
+                    <strong>Benign Keratosis:</strong> Non-cancerous skin growths.
+                    <em>Severity: Low</em>
+                    <span>These growths are harmless and do not require treatment unless they become bothersome.</span>
+                </div>
+            </li>
+            <li>
+                <img src="/static/images/Dermatofibroma.png" alt="Dermatofibroma">
+                <div>
+                    <strong>Dermatofibroma:</strong> Benign skin growth often caused by minor injuries.
+                    <em>Severity: Low</em>
+                    <span>Completely harmless and rarely requires treatment unless it causes discomfort.</span>
+                </div>
+            </li>
+            <li>
+                <img src="/static/images/Vascular Lesion.png" alt="Vascular Lesion">
+                <div>
+                    <strong>Vascular Lesion:</strong> Marks caused by abnormal blood vessels.
+                    <em>Severity: Low to Moderate</em>
+                    <span>Mostly benign but might require treatment for cosmetic reasons or if bleeding occurs.</span>
+                </div>
+            </li>
+            <li>
+                <img src="/static/images/Squamous Cell Carcinoma.png" alt="Squamous Cell Carcinoma">
+                <div>
+                    <strong>Squamous Cell Carcinoma (SCC):</strong> A type of skin cancer that can spread.
+                    <em>Severity: High</em>
+                    <span>More aggressive than basal cell carcinoma. It can grow and spread to other parts of the body if untreated, making early detection important.</span>
+                </div>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>

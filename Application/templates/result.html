@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f6f9;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: left; /* Align text to the left */
+        }
+
+        h1, h2 {
+            color: #333;
+            text-align: center;
+        }
+
+        .result-section {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #dff0d8;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .result-section h2 {
+            color: #000000;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .result-section p {
+            font-size: 16px;
+            margin: 5px 0;
+            line-height: 1.5;
+        }
+
+        .result-section img {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Prediction Result</h1>
+        <div class="result-section">
+            <h2>Disease: {{ predicted_disease }}</h2>
+            <p><strong>Severity:</strong> {{ severity }}</p>
+            <p><strong>Symptoms:</strong> {{ symptoms }}</p>
+            <p><strong>Treatment:</strong> {{ treatment }}</p>
+           
+        </div>
+    </div>
+</body>
+</html>

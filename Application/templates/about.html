@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DermaStratif: Multiclass Lesion Stratification and diagnosis </title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: #ffffff;
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #000203;
+            text-align: center;
+        }
+        h2, h3 {
+            color: #000407;
+        }
+        p {
+            line-height: 1.6;
+        }
+        ul {
+            list-style-type: disc;
+            padding-left: 40px;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        .highlight {
+            font-weight: bold;
+            color: #d9534f;
+        }
+        .accuracy {
+            background: #e9f7ef;
+            padding: 15px;
+            border: 1px solid #c3e6cb;
+            border-radius: 5px;
+            color: #155724;
+            margin: 10px 0;
+        }
+        .dataset {
+            background: #fdf2e9;
+            padding: 15px;
+            border: 1px solid #f5c6cb;
+            border-radius: 5px;
+            color: #721c24;
+            margin: 10px 0;
+        }
+        .technique {
+            background: #e3f2fd;
+            padding: 15px;
+            border: 1px solid #bee5eb;
+            border-radius: 5px;
+            color: #0c5460;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>DermaStratif: Multiclass Lesion Stratification and Diagnosis</h1>
+<br>
+        <!-- Base Model Section -->
+        <div class="section">
+            <h2>Base Model: EfficientNet</h2>
+            <p>
+                The core architecture of the skin cancer classification model is built upon 
+                <span class="highlight">EfficientNet-B0</span>, a lightweight yet highly effective convolutional neural network 
+                that optimizes both accuracy and computational efficiency.
+            </p>
+            <ul>
+                <li><strong>Architecture:</strong> EfficientNet-B0</li>
+                <li><strong>Pretrained Weights:</strong> Trained on the ImageNet dataset</li>
+                <li><strong>Purpose:</strong> To act as the backbone for feature extraction</li>
+                <li><strong>Base Model Validation Accuracy:</strong> 74%</li>
+            </ul>
+        </div>
+
+        <!-- Fine-Tuning Techniques Section -->
+        <div class="section">
+            <h2>Fine-Tuning Techniques</h2>
+            <p>The model was fine-tuned using advanced techniques to adapt the base architecture for the specific task of classifying skin cancer types:</p>
+            
+            <div class="technique">
+                <h3>1. LoRA (Low-Rank Adaptation)</h3>
+                <p>
+                    LoRA introduces low-rank learnable matrices into the pre-trained model layers to enable efficient fine-tuning.
+                    This technique allows the model to learn task-specific features with minimal computational overhead.
+                </p>
+                <ul>
+                    <li>LoRA layers were applied to the fully connected layers in the classifier.</li>
+                    <li>Enabled efficient parameter tuning without modifying the pre-trained backbone.</li>
+                </ul>
+                <p><strong>Validation Accuracy:</strong> <span class="highlight">80%</span></p>
+            </div>
+
+            <div class="technique">
+                <h3>2. Adapter Layers</h3>
+                <p>
+                    Adapter layers were added to the base model to learn additional task-specific parameters while freezing most of the original model weights. 
+                    This ensures the base model remains largely intact while improving classification performance.
+                </p>
+                <ul>
+                    <li>Adapter layers were introduced in intermediate feature layers of the model.</li>
+                    <li>Improved the model's ability to generalize across different types of skin lesions.</li>
+                </ul>
+                <p><strong>Validation Accuracy:</strong> <span class="highlight">76%</span></p>
+            </div>
+        </div>
+
+        <!-- Dataset Information -->
+        <div class="section">
+            <h2>Dataset</h2>
+            <div class="dataset">
+                <p>
+                    The model was trained and validated on a dataset containing high-resolution dermoscopic images of skin lesions. 
+                    The dataset included images from the following classes:
+                </p>
+                <ul>
+                    <li>Melanoma</li>
+                    <li>Basal Cell Carcinoma</li>
+                    <li>Squamous Cell Carcinoma</li>
+                    <li>Actinic Keratosis</li>
+                    <li>Benign Keratosis</li>
+                    <li>Dermatofibroma</li>
+                    <li>Vascular Lesion</li>
+                    <li>Melanocytic Nevus</li>
+                </ul>
+                <p>
+                    The dataset was preprocessed with augmentation techniques such as resizing, rotation, and normalization to improve model robustness.
+                </p>
+            </div>
+        </div>
+
+        <!-- Summary of Accuracies -->
+        <div class="section">
+            <h2>Summary of Model Performance</h2>
+            <div class="accuracy">
+                <strong>Base Model Validation Accuracy:</strong> 74%
+            </div>
+            <div class="accuracy">
+                <strong>Adapter Fine-Tuning Validation Accuracy:</strong> 76%
+            </div>
+            <div class="accuracy">
+                <strong>LoRA Fine-Tuning Validation Accuracy:</strong> 80%
+            </div>
+        </div>
+    </div>
+</body>
+</html>
