@@ -1,26 +1,14 @@
+--extra-index-url https://download.pytorch.org/whl/cpu
 Flask==2.3.3
 Werkzeug==2.3.7
-torch==2.2.2
-torchvision==0.17.2
+torch==2.2.2+cpu
+torchvision==0.17.2+cpu
 Pillow==10.2.0
 scikit-image==0.22.0
-scikit-learn==1.4.2
 numpy==1.26.4
 google-generativeai==0.3.0
 python-dotenv==1.0.0
-
-# Production server
 gunicorn==21.2.0
 python-multipart==0.0.6
-
-# Monitoring and logging
 python-json-logger==2.0.7
-
-# API and utilities
 requests==2.31.0
-
-# Development and testing (optional)
-pytest==7.4.0
-pytest-cov==4.1.0
-black==23.7.0
-pylint==2.17.5
