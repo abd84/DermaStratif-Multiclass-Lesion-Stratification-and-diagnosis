@@ -1,4 +1,14 @@
 {
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "rewrites": [
+    {
+      "source": "/predict",
+      "destination": "http://147.182.173.184:3004/predict"
+    },
+    {
+      "source": "/api/:path*",
+      "destination": "http://147.182.173.184:3004/:path*"
+    }
+  ]
 }
