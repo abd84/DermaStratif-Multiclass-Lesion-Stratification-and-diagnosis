@@ -5,9 +5,17 @@
   const toggle = document.getElementById('navToggle');
   const mobileNav = document.getElementById('mobileNav');
   if (toggle && mobileNav) {
-    toggle.addEventListener('click', () => mobileNav.classList.toggle('open'));
+    toggle.addEventListener('click', () => {
+      const open = mobileNav.classList.toggle('open');
+      document.body.style.overflow = open ? 'hidden' : '';
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
     mobileNav.querySelectorAll('a').forEach((a) => {
-      a.addEventListener('click', () => mobileNav.classList.remove('open'));
+      a.addEventListener('click', () => {
+        mobileNav.classList.remove('open');
+        document.body.style.overflow = '';
+        toggle.setAttribute('aria-expanded', 'false');
+      });
     });
   }
 
