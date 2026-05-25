@@ -99,20 +99,29 @@ class EfficientNetWithLoRA(nn.Module):
         x = self.classifier(x)
         return x
 
+_APP_DIR = os.path.dirname(os.path.abspath(__file__))
+_REPO_ROOT = os.path.dirname(_APP_DIR)
+_DEFAULT_MODEL_PATH = os.path.join(_REPO_ROOT, "Saved Models", "best_model1_lora.pth")
+
+
+def resolve_model_path():
+    return os.environ.get("MODEL_PATH", _DEFAULT_MODEL_PATH)
+
+
 # Load the model
 def load_model():
     base_model = efficientnet_b0(weights=None)
     num_classes = 8
     trained = EfficientNetWithLoRA(base_model, num_classes=num_classes, r=8, alpha=32)
 
-    saved_model_path = '../Saved Models/best_model1_lora.pth'
+    saved_model_path = resolve_model_path()
     if os.path.exists(saved_model_path):
         state_dict = torch.load(saved_model_path, map_location='cpu')
         trained.load_state_dict(state_dict, strict=False)
         log.info(f"Trained model loaded: {saved_model_path}")
     else:
         log.error(f"Trained model not found at: {saved_model_path}")
-        exit()
+        return None
 
     trained.to(device)
     trained.eval()
@@ -171,6 +180,9 @@ def get_model_fallback(image):
     Returns a result dict with clinical info from the static disease_info store.
     """
     log.info("[FALLBACK] Running trained model inference locally")
+    if model is None:
+        log.error("[FALLBACK] Model weights not loaded")
+        return None
     try:
         image_tensor = transform(image).unsqueeze(0).to(device)
         outputs = model(image_tensor)

@@ -1,0 +1,9 @@
+[project]
+name = "derma-stratif-inference"
+version = "1.0.0"
+description = "8-class skin lesion stratification with structured clinical reports"
+readme = "README.md"
+requires-python = ">=3.11"
+
+[tool.vercel]
+entrypoint = "Application.app:app"
