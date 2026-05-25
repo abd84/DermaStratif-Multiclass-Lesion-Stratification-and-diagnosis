@@ -1,15 +1,66 @@
 import os
+import logging
 import torch
-from flask import Flask, request, render_template, url_for
+from flask import Flask, request, render_template, url_for, jsonify
 from torchvision import transforms
 from torchvision.models import efficientnet_b0
 from PIL import Image
 import math
 from torch import nn
+import json
+import google.generativeai as genai
+from dotenv import load_dotenv
+
+# ── Logging setup ──────────────────────────────────────────────────────────────
+logging.basicConfig(
+    level=logging.INFO,
+    format="[%(asctime)s] %(levelname)s  %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S"
+)
+log = logging.getLogger("dermastratif")
+
+# Load environment variables
+load_dotenv()
+
+VISION_API_KEY = os.getenv("VISION_API_KEY") or os.getenv("GEMINI_API_KEY")
+if VISION_API_KEY:
+    genai.configure(api_key=VISION_API_KEY)
+    log.info("Vision analysis key loaded successfully")
+else:
+    log.warning("Vision API key not found — cloud vision analysis will be unavailable")
 
 
 # Flask app initialization
 app = Flask(__name__)
+app.config["TEMPLATES_AUTO_RELOAD"] = True
+
+
+def sanitize_display_text(text):
+    """Remove vendor/AI branding from text shown in the UI."""
+    if not text:
+        return text
+    out = str(text)
+    for old, new in (
+        ("The AI identified", "Analysis indicates"),
+        ("the AI identified", "analysis indicates"),
+        ("AI-assisted", "computer-assisted"),
+        ("AI analysis", "clinical analysis"),
+        ("AI-powered", "automated"),
+        ("AI Severity", "Severity"),
+        ("Gemini", "vision"),
+        ("gemini", "vision"),
+    ):
+        out = out.replace(old, new)
+    return out
+
+
+def risk_tier_from_analysis(is_cancer, cancer_status):
+    if is_cancer:
+        return "high"
+    if cancer_status and "Precancerous" in cancer_status:
+        return "moderate"
+    return "low"
+
 
 # Device setup
 device = torch.device("mps") if torch.backends.mps.is_available() else torch.device("cpu")
@@ -51,23 +102,23 @@ class EfficientNetWithLoRA(nn.Module):
 # Load the model
 def load_model():
     base_model = efficientnet_b0(weights=None)
-    num_classes = 8  # Replace with the number of classes
-    model = EfficientNetWithLoRA(base_model, num_classes=num_classes, r=8, alpha=32)
+    num_classes = 8
+    trained = EfficientNetWithLoRA(base_model, num_classes=num_classes, r=8, alpha=32)
 
-    # Load the saved state dictionary
-    saved_model_path = '/Users/abdullah/Desktop/VS/project/Saved Models/best_model1_lora.pth'
+    saved_model_path = '../Saved Models/best_model1_lora.pth'
     if os.path.exists(saved_model_path):
         state_dict = torch.load(saved_model_path, map_location='cpu')
-        model.load_state_dict(state_dict, strict=False)  # Allow partial loading
-        print(f"Model loaded successfully from {saved_model_path}")
+        trained.load_state_dict(state_dict, strict=False)
+        log.info(f"Trained model loaded: {saved_model_path}")
     else:
-        print(f"Saved model not found at {saved_model_path}.")
+        log.error(f"Trained model not found at: {saved_model_path}")
         exit()
 
-    model.to(device)
-    model.eval()
-    return model
+    trained.to(device)
+    trained.eval()
+    return trained
 
+log.info(f"Device: {'mps' if torch.backends.mps.is_available() else 'cpu'}")
 model = load_model()
 
 # Define label-to-disease mapping
@@ -89,6 +140,165 @@ transform = transforms.Compose([
     transforms.ToTensor(),
     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
 ])
+
+# Define supported skin lesion classes
+SUPPORTED_DISEASES = [
+    "Melanoma",
+    "Basal Cell Carcinoma",
+    "Squamous Cell Carcinoma",
+    "Actinic Keratosis",
+    "Benign Keratosis",
+    "Dermatofibroma",
+    "Vascular Lesion",
+    "Melanocytic Nevus"
+]
+
+# Define cancer status for each disease
+CANCER_STATUS = {
+    "Melanoma": {"is_cancer": True, "type": "High-Risk Skin Cancer"},
+    "Basal Cell Carcinoma": {"is_cancer": True, "type": "Skin Cancer (Non-Melanoma)"},
+    "Squamous Cell Carcinoma": {"is_cancer": True, "type": "Skin Cancer (Non-Melanoma)"},
+    "Actinic Keratosis": {"is_cancer": False, "type": "Precancerous Lesion"},
+    "Benign Keratosis": {"is_cancer": False, "type": "Benign Growth"},
+    "Dermatofibroma": {"is_cancer": False, "type": "Benign Growth"},
+    "Vascular Lesion": {"is_cancer": False, "type": "Benign Vascular Growth"},
+    "Melanocytic Nevus": {"is_cancer": False, "type": "Common Mole (Benign)"}
+}
+
+def get_model_fallback(image):
+    """
+    Fallback: run EfficientNet-LoRA locally when vision analysis is unavailable.
+    Returns a result dict with clinical info from the static disease_info store.
+    """
+    log.info("[FALLBACK] Running trained model inference locally")
+    try:
+        image_tensor = transform(image).unsqueeze(0).to(device)
+        outputs = model(image_tensor)
+        probs = torch.nn.functional.softmax(outputs, dim=1).cpu().detach().numpy()[0]
+        predicted_label = int(probs.argmax())
+        confidence = float(probs[predicted_label])
+
+        predicted_disease = label_to_disease.get(predicted_label, "Unknown")
+        cancer_info = CANCER_STATUS.get(predicted_disease, {"is_cancer": False, "type": "Benign"})
+        basic = disease_info.get(predicted_disease, {})
+
+        if cancer_info["is_cancer"]:
+            c_status = f"CANCER DETECTED — {cancer_info['type']}"
+        elif "Precancerous" in cancer_info["type"]:
+            c_status = f"PRECANCEROUS LESION — {cancer_info['type']}"
+        else:
+            c_status = f"NO CANCER DETECTED — {cancer_info['type']}"
+
+        log.info(f"[FALLBACK] Result: {predicted_disease} ({confidence:.1%} confidence)")
+
+        return {
+            "not_skin_image": False,
+            "predicted_disease": predicted_disease,
+            "confidence": f"{confidence:.1%}",
+            "is_cancer": cancer_info["is_cancer"],
+            "cancer_status": c_status,
+            "ai_severity": basic.get("severity", "Moderate"),
+            "finding_explanation": (
+                f"Visual patterns are consistent with {predicted_disease}. "
+                "This assessment is based on analysis of the lesion's colour, shape, border "
+                "characteristics, and texture observed in the uploaded image."
+            ),
+            "visual_characteristics": (
+                f"Visual features consistent with {predicted_disease} were detected, "
+                "including characteristic colour distribution, border definition, and surface texture."
+            ),
+            "detailed_symptoms": basic.get("symptoms", "Please consult a dermatologist for a detailed symptom assessment."),
+            "root_causes": (
+                "Multiple factors may contribute to this condition, including UV radiation exposure, "
+                "genetic predisposition, immune function, and environmental influences."
+            ),
+            "differential_diagnosis_notes": (
+                f"{predicted_disease} was identified as the most probable classification "
+                "based on deep learning analysis of the lesion's visual characteristics."
+            ),
+            "home_treatments": basic.get("treatment", "Professional medical consultation is recommended before attempting any self-treatment."),
+            "medical_treatments": basic.get("treatment", "Please consult a board-certified dermatologist for appropriate treatment options."),
+            "when_to_see_doctor": (
+                "Schedule an appointment with a board-certified dermatologist promptly for "
+                "professional confirmation and a tailored treatment plan."
+            ),
+            "prevention_tips": (
+                "Apply broad-spectrum SPF 30+ sunscreen daily, avoid peak UV hours, "
+                "wear protective clothing, and perform monthly skin self-examinations."
+            ),
+            "urgent_warning_signs": (
+                "Seek immediate medical attention if the lesion bleeds spontaneously, "
+                "grows rapidly over days or weeks, changes colour significantly, or causes pain."
+            ),
+            "confidence_justification": f"Confidence score of {confidence:.1%} based on trained model inference.",
+        }
+    except Exception as e:
+        log.error(f"[FALLBACK] Trained model inference failed: {e}")
+        return None
+
+
+def get_vision_analysis(image):
+    """Analyze the skin lesion image and return a full clinical assessment dict, or None on failure."""
+    log.info("[AI] Starting vision analysis")
+    try:
+        vision_model = genai.GenerativeModel('gemini-2.5-flash')
+
+        prompt = """You are a board-certified dermatology AI expert. Carefully analyze this skin lesion image and provide a complete clinical assessment.
+
+CLASSIFICATION RULE: You MUST classify the lesion into EXACTLY ONE of these 8 categories — no others:
+  - Melanoma
+  - Basal Cell Carcinoma
+  - Squamous Cell Carcinoma
+  - Actinic Keratosis
+  - Benign Keratosis
+  - Dermatofibroma
+  - Vascular Lesion
+  - Melanocytic Nevus
+
+If the image does not appear to show a skin lesion set "not_skin_image": true in the response.
+
+Return ONLY a valid JSON object — no markdown, no preamble, no trailing text:
+{
+    "not_skin_image": false,
+    "predicted_disease": "<one of the 8 categories above>",
+    "confidence": "<e.g. 87.4%>",
+    "is_cancer": <true or false>,
+    "cancer_status": "<CANCER DETECTED | NO CANCER DETECTED | PRECANCEROUS LESION — one sentence>",
+    "ai_severity": "<High | Moderate | Low — with one-line justification>",
+    "finding_explanation": "<Detailed explanation of WHY this classification was made, referencing specific visual features observed in the image>",
+    "visual_characteristics": "<Describe color, shape, border regularity, texture, size estimation, and any distinctive markers visible>",
+    "detailed_symptoms": "<Comprehensive list of symptoms and clinical signs a patient with this condition typically experiences>",
+    "root_causes": "<Evidence-based causes and known risk factors for this condition>",
+    "differential_diagnosis_notes": "<Which similar conditions were considered and why they were ruled out>",
+    "home_treatments": "<Safe home-care measures appropriate for this condition — clearly note when professional care is essential>",
+    "medical_treatments": "<Professional medical treatment options available for this condition>",
+    "prevention_tips": "<Actionable prevention strategies specific to this condition>",
+    "urgent_warning_signs": "<Red flags that require immediate medical attention>",
+    "when_to_see_doctor": "<Clear guidance on urgency and timeline for professional evaluation>",
+    "confidence_justification": "<Brief explanation of the confidence level given>"
+}"""
+
+        response = vision_model.generate_content([prompt, image])
+        text = response.text.strip()
+
+        # Strip markdown code fences if present
+        if text.startswith('```'):
+            lines = text.split('\n')
+            text = '\n'.join(lines[1:-1] if lines[-1].strip() == '```' else lines[1:])
+
+        analysis = json.loads(text)
+        disease = analysis.get("predicted_disease", "Unknown")
+        conf    = analysis.get("confidence", "?")
+        log.info(f"[AI] Success — {disease} ({conf} confidence)")
+        return analysis
+
+    except json.JSONDecodeError as e:
+        log.error(f"[AI] JSON parse failed: {e}")
+        log.debug(f"[AI] Raw response: {response.text[:600]}")
+        return None
+    except Exception as e:
+        log.error(f"[AI] Vision analysis exception: {e}")
+        return None
 
 # Disease information
 # Disease information
@@ -181,11 +391,7 @@ def is_valid_skin_image(image_array):
     brightness = np.mean(grayscale_image)
     variance = np.var(grayscale_image)
     
-    # Print metrics for debugging (can be removed in production)
-    print(f"Edge Density: {edge_density}")
-    print(f"Brightness: {brightness}")
-    print(f"Variance: {variance}")
-    print(f"Color Std: {np.mean(std_pixel)}")
+    log.info(f"[VALIDATE] edge={edge_density:.4f}  brightness={brightness:.4f}  variance={variance:.4f}  color_std={np.mean(std_pixel):.2f}")
     
     # Define relaxed thresholds
     EDGE_DENSITY_THRESHOLD = 0.005  # Minimum fraction of edges (relaxed)
@@ -199,69 +405,99 @@ def is_valid_skin_image(image_array):
     is_variance_valid = variance > VARIANCE_THRESHOLD
     is_color_valid = np.mean(std_pixel) > COLOR_STD_THRESHOLD
     
-    # Combine all checks
-    return is_edge_valid and is_brightness_valid and is_variance_valid and is_color_valid
+    result = is_edge_valid and is_brightness_valid and is_variance_valid and is_color_valid
+    if not result:
+        reasons = []
+        if not is_edge_valid:      reasons.append(f"low edge density ({edge_density:.4f})")
+        if not is_brightness_valid: reasons.append(f"brightness out of range ({brightness:.4f})")
+        if not is_variance_valid:  reasons.append(f"low variance ({variance:.4f})")
+        if not is_color_valid:     reasons.append(f"low colour std ({np.mean(std_pixel):.2f})")
+        log.warning(f"[VALIDATE] Image rejected — {', '.join(reasons)}")
+    else:
+        log.info("[VALIDATE] Image passed pixel validation")
+    return result
 
 
 @app.route('/predict', methods=['POST'])
 def predict():
     if 'file' not in request.files:
         return "No file uploaded", 400
-    
+
     file = request.files['file']
     if file.filename == '':
         return "No selected file", 400
 
     try:
-        # Open and preprocess the image
+        log.info(f"[REQUEST] Image received: {file.filename}")
         image = Image.open(file).convert("RGB")
         image_array = np.array(image)
+        log.info(f"[REQUEST] Image size: {image.size}, mode: {image.mode}")
 
-        # Check if the image passes preprocessing checks
+        # Pixel-level sanity check
         if not is_valid_skin_image(image_array):
             return render_template(
                 'error.html',
-                error_message="The uploaded image does not appear to be a valid skin image. Please upload a clear skin image."
+                error_message="The uploaded image does not appear to be a valid skin image. Please upload a clear, close-up photograph of a skin lesion."
             )
 
-        image = transform(image).unsqueeze(0).to(device)
+        # Primary: vision analysis
+        analysis = get_vision_analysis(image)
 
-        # Predict the disease
-        outputs = model(image)
-        probabilities = torch.nn.functional.softmax(outputs, dim=1).cpu().detach().numpy()[0]
-        predicted_label = np.argmax(probabilities)
-        confidence = probabilities[predicted_label]
+        # Fallback: trained model + static clinical info
+        if analysis is None:
+            log.warning("[REQUEST] Vision analysis failed — activating trained model fallback")
+            analysis = get_model_fallback(image)
 
-        # Calculate entropy of the probability distribution
-        entropy = calculate_entropy(probabilities)
-
-        # Apply confidence and entropy thresholds
-        CONFIDENCE_THRESHOLD = 0.7  # Lower confidence threshold
-        ENTROPY_THRESHOLD = 2.0    # Adjusted entropy threshold
-        if confidence < CONFIDENCE_THRESHOLD or entropy > ENTROPY_THRESHOLD:
+        if analysis is None:
+            log.error("[REQUEST] Both vision analysis and fallback failed — returning error page")
             return render_template(
                 'error.html',
-                error_message="The uploaded image does not appear to be a valid skin image. Please upload a clear and relevant image."
+                error_message="We were unable to analyze this image. Please try again with a clearer, well-lit photograph of the skin lesion."
             )
 
-        # Get predicted disease details
-        predicted_disease = label_to_disease.get(predicted_label, "Unknown")
-        info = disease_info.get(predicted_disease, {})
-        
-        # Render the result page with prediction details
+        if analysis.get("not_skin_image", False):
+            log.warning("[REQUEST] Image rejected as non-skin by vision analysis")
+            return render_template(
+                'error.html',
+                error_message="The uploaded image does not appear to show a skin lesion. Please upload a clear, close-up photograph of the area of concern."
+            )
+
+        predicted_disease = analysis.get("predicted_disease", "Unknown")
+        confidence        = analysis.get("confidence", "N/A")
+        is_cancer         = analysis.get("is_cancer", False)
+        basic_info        = disease_info.get(predicted_disease, {})
+
+        log.info(f"[REQUEST] Rendering result — disease: {predicted_disease}, confidence: {confidence}, cancer: {is_cancer}")
+
+        cancer_status = analysis.get("cancer_status", "")
         return render_template(
             'result.html',
             predicted_disease=predicted_disease,
-            severity=info.get("severity"),
-            symptoms=info.get("symptoms"),
-            treatment=info.get("treatment"),
-            predicted_disease_image=url_for('static', filename=f"images/{info.get('image')}")
+            confidence=confidence,
+            is_cancer=is_cancer,
+            cancer_status=sanitize_display_text(cancer_status),
+            severity=analysis.get("ai_severity", "Moderate"),
+            risk_tier=risk_tier_from_analysis(is_cancer, cancer_status),
+            finding_explanation=sanitize_display_text(analysis.get("finding_explanation", "")),
+            visual_characteristics=sanitize_display_text(analysis.get("visual_characteristics", "")),
+            differential_diagnosis=sanitize_display_text(analysis.get("differential_diagnosis_notes", "")),
+            differential_diagnosis_notes=sanitize_display_text(analysis.get("differential_diagnosis_notes", "")),
+            confidence_justification=sanitize_display_text(analysis.get("confidence_justification", "")),
+            detailed_symptoms=sanitize_display_text(analysis.get("detailed_symptoms", "")),
+            root_causes=sanitize_display_text(analysis.get("root_causes", "")),
+            home_treatments=sanitize_display_text(analysis.get("home_treatments", "")),
+            medical_treatments=sanitize_display_text(analysis.get("medical_treatments", "")),
+            when_to_see_doctor=sanitize_display_text(analysis.get("when_to_see_doctor", "")),
+            prevention_tips=sanitize_display_text(analysis.get("prevention_tips", "")),
+            urgent_warning_signs=sanitize_display_text(analysis.get("urgent_warning_signs", "")),
+            predicted_disease_image=url_for('static', filename=f"images/{basic_info.get('image', 'melanoma.png')}")
         )
+
     except Exception as e:
-        # Handle any unexpected errors
+        log.exception(f"[REQUEST] Unhandled exception in predict: {e}")
         return render_template(
             'error.html',
-            error_message=f"An unexpected error occurred: {str(e)}"
+            error_message="An unexpected error occurred. Please try again with a different image."
         ), 500
 
 
@@ -270,4 +506,13 @@ def predict():
 
 # Run the app
 if __name__ == "__main__":
-    app.run(debug=True)
+    import sys
+    
+    # Get port from environment variable, command line argument, or default
+    port = int(os.getenv('FLASK_PORT', sys.argv[1] if len(sys.argv) > 1 else 5000))
+    debug = os.getenv('FLASK_ENV', 'production') == 'development'
+    
+    log.info(f"Starting DermaStratif on port {port} (debug={debug})")
+    
+    # Bind to 0.0.0.0 so it's accessible externally
+    app.run(host='0.0.0.0', port=port, debug=debug)

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}DermaStratif{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+    <header class="site-header">
+        <div class="nav-inner">
+            <a href="/" class="logo">
+                <span class="logo-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                    </svg>
+                </span>
+                DermaStratif
+            </a>
+            <nav class="nav-links" aria-label="Main">
+                <a href="/#features">Features</a>
+                <a href="/#mastery">Screening Flow</a>
+                <a href="/#scan">Scan</a>
+                <a href="/#faqs">FAQs</a>
+                <a href="/about">About</a>
+            </nav>
+            <div class="nav-actions">
+                <a href="/about" class="btn-outline">About</a>
+                <a href="/#scan" class="btn-green">Scan free</a>
+            </div>
+            <button type="button" class="nav-toggle" id="navToggle" aria-label="Open menu">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+                </svg>
+            </button>
+        </div>
+        <nav class="mobile-nav" id="mobileNav" aria-label="Mobile">
+            <a href="/#features">Features</a>
+            <a href="/#mastery">Screening Flow</a>
+            <a href="/#scan">Scan a Lesion</a>
+            <a href="/#faqs">FAQs</a>
+            <a href="/about">About</a>
+            <a href="/#scan" class="btn-green" style="margin-top:12px;text-align:center;justify-content:center;">Scan free</a>
+        </nav>
+    </header>
+
+    {% block content %}{% endblock %}
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div>
+                <a href="/" class="logo" style="color:#fff;margin-bottom:16px;">
+                    <span class="logo-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>
+                    DermaStratif
+                </a>
+                <p style="font-size:0.875rem;margin-top:12px;max-width:320px;">AI-assisted skin lesion stratification for education and early awareness. Not a substitute for professional diagnosis.</p>
+            </div>
+            <div class="footer-links">
+                <a href="/#features">Features</a>
+                <a href="/#mastery">Screening Flow</a>
+                <a href="/#scan">Scan</a>
+                <a href="/about">About</a>
+                <a href="/#faqs">FAQs</a>
+            </div>
+        </div>
+        <p class="footer-bottom">
+            © 2026 DermaStratif. For educational and screening support only — always consult a board-certified dermatologist for clinical decisions.
+        </p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

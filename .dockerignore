@@ -1,0 +1,20 @@
+.git
+.gitignore
+README.md
+DEPLOYMENT.md
+SETUP_GUIDE.md
+.DS_Store
+__pycache__
+*.pyc
+.pytest_cache
+.venv
+venv
+.env
+.env.local
+.vscode
+.idea
+*.swp
+.ipynb_checkpoints
+Notebooks/
+Model Training Scripts/
+*.log

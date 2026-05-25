@@ -1,41 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Error</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f9f9f9;
-        }
-        .container {
-            text-align: center;
-            margin: 100px auto;
-        }
-        .error-message {
-            color: #d9534f;
-            font-size: 20px;
-        }
-        a {
-            display: inline-block;
-            margin-top: 20px;
-            text-decoration: none;
-            color: #007bff;
-            font-weight: bold;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Error</h1>
-        <p class="error-message">{{ error_message }}</p>
-        <a href="/">Go Back to Home</a>
+{% extends "base.html" %}
+{% block title %}Analysis Error — DermaStratif{% endblock %}
+
+{% block content %}
+<div class="error-page-wrap">
+    <div class="error-box">
+        <div class="error-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+        </div>
+        <p style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--critical);margin-bottom:12px;">Analysis error</p>
+        <h1>Unable to process your image</h1>
+        <div class="error-msg">{{ error_message }}</div>
+        <div class="result-actions" style="justify-content:center;">
+            <a href="/#scan" class="btn-green">Try again</a>
+            <a href="/" class="btn-outline">Home</a>
+        </div>
+        <div class="error-tips">
+            <strong style="font-size:0.8125rem;color:var(--text);">Tips for a successful scan</strong>
+            <ul>
+                <li>Upload a clear, well-lit close-up of the skin lesion</li>
+                <li>Keep the image in focus — avoid blur or obstruction</li>
+                <li>Use JPG or PNG only, under 10 MB</li>
+                <li>Ensure the photo shows a skin lesion, not other subjects</li>
+                <li>If the error persists, try a different angle or lighting</li>
+            </ul>
+        </div>
     </div>
-</body>
-</html>
+</div>
+{% endblock %}
