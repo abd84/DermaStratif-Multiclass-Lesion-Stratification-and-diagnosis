@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Error — DermaStratif</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="nav-inner">
+            <a href="./index.html" class="logo"><span class="logo-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>DermaStratif</a>
+            <nav class="nav-links" aria-label="Main">
+                <a href="./index.html#features">Features</a><a href="./index.html#mastery">Screening Flow</a><a href="./index.html#scan">Scan</a><a href="./index.html#faqs">FAQs</a><a href="./about.html">About</a>
+            </nav>
+            <div class="nav-actions">
+                <a href="./about.html" class="btn-outline">About</a>
+                <a href="./index.html#scan" class="btn-green">Scan free</a>
+            </div>
+            <button type="button" class="nav-toggle" id="navToggle" aria-label="Open menu"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+        </div>
+        <nav class="mobile-nav" id="mobileNav" aria-label="Mobile">
+            <a href="./index.html#features">Features</a><a href="./index.html#mastery">Screening Flow</a><a href="./index.html#scan">Scan a Lesion</a><a href="./index.html#faqs">FAQs</a><a href="./about.html">About</a>
+            <a href="./index.html#scan" class="btn-green" style="margin-top:12px;text-align:center;justify-content:center;">Scan free</a>
+        </nav>
+    </header>
+
+<div class="error-page-wrap">
+    <div class="error-box">
+        <div class="error-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+        </div>
+        <p style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--critical);margin-bottom:12px;">Analysis error</p>
+        <h1>Unable to process your image</h1>
+        <div class="error-msg" id="error-message">An unexpected error occurred. Please try again.</div>
+        <div class="result-actions" style="justify-content:center;">
+            <a href="./index.html#scan" class="btn-green">Try again</a>
+            <a href="./index.html" class="btn-outline">Home</a>
+        </div>
+        <div class="error-tips">
+            <strong style="font-size:0.8125rem;color:var(--text);">Tips for a successful scan</strong>
+            <ul>
+                <li>Upload a clear, well-lit close-up of the skin lesion</li>
+                <li>Keep the image in focus — avoid blur or obstruction</li>
+                <li>Use JPG or PNG only, under 10 MB</li>
+                <li>Ensure the photo shows a skin lesion, not other subjects</li>
+                <li>If the error persists, try a different angle or lighting</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div>
+                <a href="./index.html" class="logo" style="color:#fff;margin-bottom:16px;"><span class="logo-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>DermaStratif</a>
+                <p style="font-size:0.875rem;margin-top:12px;max-width:320px;">AI-assisted skin lesion stratification for education and early awareness. Not a substitute for professional diagnosis.</p>
+            </div>
+            <div class="footer-links">
+                <a href="./index.html#features">Features</a><a href="./index.html#mastery">Screening Flow</a><a href="./index.html#scan">Scan</a><a href="./about.html">About</a><a href="./index.html#faqs">FAQs</a>
+            </div>
+        </div>
+        <p class="footer-bottom">© 2026 DermaStratif. For educational and screening support only — always consult a board-certified dermatologist for clinical decisions.</p>
+    </footer>
+
+    <script src="./config.js"></script>
+    <script src="./app.js"></script>
+    <script>
+    (function () {
+        var msg = localStorage.getItem('derma_error');
+        var el = document.getElementById('error-message');
+        if (el) {
+            el.textContent = msg || 'An unexpected error occurred. Please try again.';
+        }
+        // Clear the error after reading it
+        localStorage.removeItem('derma_error');
+    })();
+    </script>
+</body>
+</html>

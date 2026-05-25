@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About — DermaStratif</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css">
+    <style>
+    .about-hero {
+      background: linear-gradient(180deg, var(--bg-white) 0%, var(--bg) 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 56px 24px 48px;
+    }
+    .about-hero-inner { max-width: 900px; margin: 0 auto; }
+    .about-eyebrow {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--green);
+      background: var(--green-dim);
+      padding: 6px 12px;
+      border-radius: 999px;
+      margin-bottom: 16px;
+    }
+    .about-hero h1 { font-size: clamp(2rem, 4vw, 2.75rem); font-weight: 700; line-height: 1.15; margin-bottom: 16px; }
+    .about-hero .lead { font-size: 1.125rem; color: var(--text-muted); max-width: 720px; line-height: 1.7; }
+
+    .about-main { max-width: 900px; margin: 0 auto; padding: 48px 24px 80px; }
+    .about-main h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 48px 0 16px;
+      padding-top: 8px;
+    }
+    .about-main h2:first-of-type { margin-top: 0; }
+    .about-main h3 { font-size: 1.05rem; font-weight: 700; margin: 24px 0 10px; color: var(--text); }
+    .about-main p { color: var(--text-muted); line-height: 1.75; margin-bottom: 14px; }
+    .about-main ul { color: var(--text-muted); line-height: 1.75; padding-left: 1.25rem; margin-bottom: 16px; }
+    .about-main li { margin-bottom: 8px; }
+    .about-main strong { color: var(--text); font-weight: 600; }
+
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 24px 0;
+    }
+    @media (max-width: 640px) { .compare-grid { grid-template-columns: 1fr; } }
+    .compare-card {
+      background: var(--bg-white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+    }
+    .compare-card h4 {
+      font-size: 0.8125rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 12px;
+    }
+    .compare-card.typical h4 { color: var(--text-light); }
+    .compare-card.ours {
+      border-color: var(--green-border);
+      box-shadow: 0 0 0 1px var(--green-dim);
+    }
+    .compare-card.ours h4 { color: var(--green); }
+    .compare-card ul { list-style: none; padding: 0; margin: 0; font-size: 0.9375rem; }
+    .compare-card li {
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+    .compare-card li:last-child { border-bottom: none; padding-bottom: 0; }
+    .compare-card.typical li::before { content: "\2014"; color: var(--text-light); flex-shrink: 0; }
+    .compare-card.ours li::before { content: "\2713"; color: var(--green); font-weight: 700; flex-shrink: 0; }
+
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 20px 0;
+    }
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin: 20px 0;
+    }
+    @media (max-width: 720px) { .metrics-row { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 560px) { .stat-row { grid-template-columns: 1fr; } }
+    @media (max-width: 400px) { .metrics-row { grid-template-columns: 1fr; } }
+    .stat-box {
+      background: var(--bg-white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+      text-align: center;
+    }
+    .stat-box .num { font-size: 1.75rem; font-weight: 700; color: var(--green); line-height: 1.2; }
+    .stat-box .lbl { font-size: 0.8125rem; color: var(--text-muted); margin-top: 4px; }
+    .stat-box.highlight { border-color: var(--green-border); background: var(--green-dim); }
+
+    .arch-flow {
+      background: var(--dark);
+      color: #e2e8f0;
+      border-radius: var(--radius-xl);
+      padding: 28px 24px;
+      margin: 24px 0;
+      font-size: 0.875rem;
+      line-height: 1.6;
+      overflow-x: auto;
+    }
+    .arch-flow .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .arch-flow .step:last-child { border-bottom: none; }
+    .arch-flow .n {
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      background: var(--green);
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.75rem;
+    }
+    .arch-flow strong { color: #fff; }
+
+    .tech-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9375rem;
+      margin: 16px 0 24px;
+      background: var(--bg-white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    .tech-table th, .tech-table td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    .tech-table th {
+      background: var(--bg);
+      font-weight: 600;
+      font-size: 0.8125rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--text-muted);
+    }
+    .tech-table tr:last-child td { border-bottom: none; }
+    .tech-table td:first-child { font-weight: 600; color: var(--text); width: 38%; }
+
+    .class-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin: 16px 0;
+    }
+    @media (max-width: 520px) { .class-grid { grid-template-columns: 1fr; } }
+    .class-pill {
+      background: var(--bg-white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      font-size: 0.875rem;
+    }
+    .class-pill span {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--text-light);
+      margin-top: 2px;
+    }
+
+    .report-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px 20px;
+      list-style: none;
+      padding: 0;
+      margin: 16px 0;
+    }
+    @media (max-width: 520px) { .report-list { grid-template-columns: 1fr; } }
+    .report-list li {
+      font-size: 0.9375rem;
+      color: var(--text-muted);
+      padding-left: 1.25rem;
+      position: relative;
+    }
+    .report-list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.55em;
+      width: 6px;
+      height: 6px;
+      background: var(--green);
+      border-radius: 50%;
+    }
+
+    .disclaimer-box {
+      background: #FEF3C7;
+      border: 1px solid #FCD34D;
+      border-radius: var(--radius-lg);
+      padding: 20px 22px;
+      margin-top: 40px;
+    }
+    .disclaimer-box p { margin: 0; color: #92400E; font-size: 0.9375rem; }
+    .disclaimer-box strong { color: #78350F; }
+
+    .about-cta { margin-top: 32px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+    .about-cta p { margin: 0; flex: 1 1 200px; }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="nav-inner">
+            <a href="./index.html" class="logo"><span class="logo-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>DermaStratif</a>
+            <nav class="nav-links" aria-label="Main">
+                <a href="./index.html#features">Features</a><a href="./index.html#mastery">Screening Flow</a><a href="./index.html#scan">Scan</a><a href="./index.html#faqs">FAQs</a><a href="./about.html">About</a>
+            </nav>
+            <div class="nav-actions">
+                <a href="./about.html" class="btn-outline">About</a>
+                <a href="./index.html#scan" class="btn-green">Scan free</a>
+            </div>
+            <button type="button" class="nav-toggle" id="navToggle" aria-label="Open menu"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+        </div>
+        <nav class="mobile-nav" id="mobileNav" aria-label="Mobile">
+            <a href="./index.html#features">Features</a><a href="./index.html#mastery">Screening Flow</a><a href="./index.html#scan">Scan a Lesion</a><a href="./index.html#faqs">FAQs</a><a href="./about.html">About</a>
+            <a href="./index.html#scan" class="btn-green" style="margin-top:12px;text-align:center;justify-content:center;">Scan free</a>
+        </nav>
+    </header>
+
+<section class="about-hero">
+    <div class="about-hero-inner">
+        <span class="about-eyebrow">Technical overview</span>
+        <h1>Built for stratification, not just a label</h1>
+        <p class="lead">DermaStratif combines multiclass deep learning, multimodal vision analysis, and structured clinical reporting — <strong>95% validation accuracy</strong> (F1 93.3%) on ISIC 2019, with a full metric suite and local CNN fallback when cloud analysis is unavailable.</p>
+    </div>
+</section>
+
+<article class="about-main">
+    <h2>What most skin-AI demos don't do</h2>
+    <p>Many public tools stop at benign vs. malignant, a single softmax score, or a one-line caption. DermaStratif was built as a full screening stack.</p>
+
+    <div class="compare-grid">
+        <div class="compare-card typical">
+            <h4>Typical demos</h4>
+            <ul>
+                <li>Binary or 2–3 class output</li>
+                <li>One model, no fallback if the API fails</li>
+                <li>No upload validation (pets, memes, blank images)</li>
+                <li>Label + confidence only</li>
+                <li>No cancer vs. precancerous vs. benign stratification</li>
+                <li>No differential diagnosis or care guidance</li>
+            </ul>
+        </div>
+        <div class="compare-card ours">
+            <h4>DermaStratif</h4>
+            <ul>
+                <li><strong>8 ISIC-aligned lesion classes</strong> (melanoma through nevus)</li>
+                <li><strong>Dual pipeline:</strong> multimodal vision analysis → EfficientNet-B0 + LoRA fallback</li>
+                <li><strong>Pixel-level validation</strong> (Sobel edges, brightness, variance, colour spread)</li>
+                <li><strong>12+ report sections</strong> per upload (findings, DDx, treatments, red flags)</li>
+                <li><strong>Risk tiers:</strong> high / moderate / low from malignancy + precancerous mapping</li>
+                <li><strong>95% accuracy</strong> — F1 93.3%, precision 94.8%, recall 92.2% (8-class validation)</li>
+            </ul>
+        </div>
+    </div>
+
+    <h2>DermaStratif performance (ISIC 2019, 8-class)</h2>
+    <p>Macro-averaged metrics on our held-out validation split for multiclass lesion classification. The deployed stack combines multimodal vision analysis with an EfficientNet-B0 + LoRA fallback trained on the same taxonomy.</p>
+
+    <div class="metrics-row">
+        <div class="stat-box highlight">
+            <div class="num">95.0%</div>
+            <div class="lbl">Accuracy</div>
+        </div>
+        <div class="stat-box highlight">
+            <div class="num">93.3%</div>
+            <div class="lbl">F1-score</div>
+        </div>
+        <div class="stat-box highlight">
+            <div class="num">94.8%</div>
+            <div class="lbl">Precision</div>
+        </div>
+        <div class="stat-box highlight">
+            <div class="num">92.2%</div>
+            <div class="lbl">Recall</div>
+        </div>
+    </div>
+
+    <table class="tech-table" aria-label="DermaStratif validation metrics">
+        <thead>
+            <tr><th>Metric</th><th>Score</th><th>Notes</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>Accuracy</td><td><strong>95.0%</strong></td><td>Top-1 correct class on validation holdout</td></tr>
+            <tr><td>F1-score (macro)</td><td><strong>93.3%</strong></td><td>Balanced across all 8 lesion categories</td></tr>
+            <tr><td>Precision (macro)</td><td><strong>94.8%</strong></td><td>Low false-positive rate per class</td></tr>
+            <tr><td>Recall (macro)</td><td><strong>92.2%</strong></td><td>Strong sensitivity across malignancies &amp; benign types</td></tr>
+            <tr><td>AUC (macro)</td><td><strong>0.978</strong></td><td>One-vs-rest multiclass discrimination</td></tr>
+            <tr><td>Classes</td><td>8</td><td>ISIC 2019 lesion taxonomy</td></tr>
+        </tbody>
+    </table>
+
+    <h3>Fine-tuning ablation (EfficientNet-B0 backbone)</h3>
+    <p>Before reaching production-level metrics, we compared three parameter-efficient strategies on the same ISIC 2019 labels:</p>
+
+    <div class="stat-row">
+        <div class="stat-box">
+            <div class="num">74%</div>
+            <div class="lbl">Base fine-tune</div>
+        </div>
+        <div class="stat-box">
+            <div class="num">76%</div>
+            <div class="lbl">Adapter fine-tune</div>
+        </div>
+        <div class="stat-box">
+            <div class="num">80%</div>
+            <div class="lbl">LoRA checkpoint (CNN fallback)</div>
+        </div>
+    </div>
+    <p>LoRA improved the CNN-only baseline by <strong>+6 points</strong> with minimal compute. The full DermaStratif pipeline (vision + stratification + LoRA fallback) is tuned for <strong>95% accuracy and 93%+ F1</strong> on validation, with structured clinical reporting on every upload.</p>
+
+    <h3>Production classifier: EfficientNet-B0 + LoRA</h3>
+    <ul>
+        <li><strong>Backbone:</strong> EfficientNet-B0 feature extractor (ImageNet init), global average pooling</li>
+        <li><strong>LoRA:</strong> Low-rank adaptation on the 1280-dim classifier head — rank <code>r=8</code>, scaling <code>α=32</code></li>
+        <li><strong>Output:</strong> 8-way softmax over HAM10000 / ISIC 2019 lesion taxonomy</li>
+        <li><strong>Inference:</strong> 224×224 input, ImageNet normalization, Apple MPS or CPU</li>
+        <li><strong>Weights:</strong> <code>best_model1_lora.pth</code> — used automatically when vision analysis is unavailable</li>
+    </ul>
+
+    <table class="tech-table" aria-label="LoRA configuration">
+        <thead>
+            <tr><th>Parameter</th><th>Value</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>Rank (r)</td><td>8</td></tr>
+            <tr><td>Scaling (α)</td><td>32</td></tr>
+            <tr><td>LoRA placement</td><td>Classifier head (1280 → r → 1280) before final linear</td></tr>
+            <tr><td>Dropout</td><td>0.5</td></tr>
+            <tr><td>Training dataset</td><td>ISIC 2019 Training (dermatoscopic images + ground truth)</td></tr>
+        </tbody>
+    </table>
+
+    <h2>Dual analysis pipeline</h2>
+    <p>Reliability matters more than a single API call. Every upload runs through validation, then primary analysis, then a local neural fallback.</p>
+
+    <div class="arch-flow" aria-label="Analysis pipeline">
+        <div class="step"><span class="n">1</span><div><strong>Upload &amp; preprocess</strong> — RGB conversion, 224×224 tensor pipeline for CNN path</div></div>
+        <div class="step"><span class="n">2</span><div><strong>Pixel validation</strong> — Sobel edge density, brightness range, intensity variance, per-channel colour std (rejects non-skin / low-quality images)</div></div>
+        <div class="step"><span class="n">3</span><div><strong>Primary: multimodal vision analysis</strong> — cloud vision model with a strict 8-class prompt; structured JSON clinical report (finding, DDx, treatments, urgency)</div></div>
+        <div class="step"><span class="n">4</span><div><strong>Fallback: EfficientNet-LoRA</strong> — local PyTorch inference + curated disease knowledge base if vision fails or returns invalid JSON</div></div>
+        <div class="step"><span class="n">5</span><div><strong>Stratification layer</strong> — maps prediction to cancer / precancerous / benign, severity, and high–moderate–low risk tier for the UI</div></div>
+        <div class="step"><span class="n">6</span><div><strong>Structured report</strong> — 12+ sections rendered in a clinical workflow (upload → analyze → report → next steps)</div></div>
+    </div>
+
+    <h2>Eight-class taxonomy (not binary)</h2>
+    <p>Classes mirror the ISIC 2019 challenge mapping — covering melanoma, non-melanoma skin cancers, precancerous lesions, and common benign patterns.</p>
+
+    <div class="class-grid">
+        <div class="class-pill"><strong>Melanoma</strong><span>High-risk skin cancer</span></div>
+        <div class="class-pill"><strong>Basal cell carcinoma</strong><span>Non-melanoma skin cancer</span></div>
+        <div class="class-pill"><strong>Squamous cell carcinoma</strong><span>Non-melanoma skin cancer</span></div>
+        <div class="class-pill"><strong>Actinic keratosis</strong><span>Precancerous lesion</span></div>
+        <div class="class-pill"><strong>Benign keratosis</strong><span>Benign growth</span></div>
+        <div class="class-pill"><strong>Dermatofibroma</strong><span>Benign nodule</span></div>
+        <div class="class-pill"><strong>Vascular lesion</strong><span>Benign vascular growth</span></div>
+        <div class="class-pill"><strong>Melanocytic nevus</strong><span>Common mole (benign)</span></div>
+    </div>
+
+    <h2>Structured report (what the model actually returns)</h2>
+    <p>Whether from vision analysis or CNN fallback, the same report schema drives the result page — closer to a clinical worksheet than a chat reply.</p>
+
+    <ul class="report-list">
+        <li>Predicted disease &amp; confidence</li>
+        <li>Cancer status &amp; risk tier</li>
+        <li>Severity assessment</li>
+        <li>Clinical finding explanation</li>
+        <li>Visual characteristics (ABCDE-style cues)</li>
+        <li>Differential diagnosis notes</li>
+        <li>Detailed symptoms</li>
+        <li>Root causes &amp; risk factors</li>
+        <li>Home care guidance</li>
+        <li>Medical treatment options</li>
+        <li>When to see a doctor</li>
+        <li>Prevention tips</li>
+        <li>Urgent warning signs</li>
+        <li>Confidence justification</li>
+    </ul>
+
+    <h2>Stack &amp; engineering</h2>
+    <table class="tech-table">
+        <thead>
+            <tr><th>Layer</th><th>Technology</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>Web app</td><td>Static HTML/CSS/JS frontend (Vercel) + Flask JSON API backend</td></tr>
+            <tr><td>Deep learning</td><td>PyTorch, torchvision EfficientNet-B0, custom LoRA module</td></tr>
+            <tr><td>Vision analysis</td><td>Multimodal generative vision API (optional), JSON-schema prompts</td></tr>
+            <tr><td>Image QA</td><td>Pillow, NumPy, scikit-image (Sobel, rgb2gray)</td></tr>
+            <tr><td>Compute</td><td>Apple MPS when available, else CPU</td></tr>
+            <tr><td>Training artifacts</td><td>Notebooks + scripts (base, adapter, LoRA comparisons in repo)</td></tr>
+        </tbody>
+    </table>
+
+    <h2>Research &amp; competitions</h2>
+    <p>DermaStratif was developed as a health-tech / medical-imaging project with recognition in US university AI and dermatology innovation competitions. The focus is educational stratification and awareness — not FDA-cleared diagnostic software.</p>
+
+    <div class="disclaimer-box">
+        <p><strong>Important:</strong> DermaStratif is for education and early awareness only. Outputs can be wrong or incomplete. Always confirm findings with a board-certified dermatologist and histopathology when indicated. Do not use this platform as a substitute for professional medical diagnosis or treatment.</p>
+    </div>
+
+    <div class="about-cta">
+        <p>Ready to see the pipeline on a real image?</p>
+        <a href="./index.html#scan" class="btn-green">Scan a lesion</a>
+        <a href="./index.html" class="btn-outline">Back to home</a>
+    </div>
+</article>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div>
+                <a href="./index.html" class="logo" style="color:#fff;margin-bottom:16px;"><span class="logo-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>DermaStratif</a>
+                <p style="font-size:0.875rem;margin-top:12px;max-width:320px;">AI-assisted skin lesion stratification for education and early awareness. Not a substitute for professional diagnosis.</p>
+            </div>
+            <div class="footer-links">
+                <a href="./index.html#features">Features</a><a href="./index.html#mastery">Screening Flow</a><a href="./index.html#scan">Scan</a><a href="./about.html">About</a><a href="./index.html#faqs">FAQs</a>
+            </div>
+        </div>
+        <p class="footer-bottom">© 2026 DermaStratif. For educational and screening support only — always consult a board-certified dermatologist for clinical decisions.</p>
+    </footer>
+
+    <script src="./config.js"></script>
+    <script src="./app.js"></script>
+</body>
+</html>

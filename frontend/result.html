@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Result — DermaStratif</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body class="result-page">
+    <header class="site-header">
+        <div class="nav-inner">
+            <a href="./index.html" class="logo"><span class="logo-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>DermaStratif</a>
+            <nav class="nav-links" aria-label="Main">
+                <a href="./index.html#features">Features</a><a href="./index.html#mastery">Screening Flow</a><a href="./index.html#scan">Scan</a><a href="./index.html#faqs">FAQs</a><a href="./about.html">About</a>
+            </nav>
+            <div class="nav-actions">
+                <a href="./about.html" class="btn-outline">About</a>
+                <a href="./index.html#scan" class="btn-green">Scan free</a>
+            </div>
+            <button type="button" class="nav-toggle" id="navToggle" aria-label="Open menu"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+        </div>
+        <nav class="mobile-nav" id="mobileNav" aria-label="Mobile">
+            <a href="./index.html#features">Features</a><a href="./index.html#mastery">Screening Flow</a><a href="./index.html#scan">Scan a Lesion</a><a href="./index.html#faqs">FAQs</a><a href="./about.html">About</a>
+            <a href="./index.html#scan" class="btn-green" style="margin-top:12px;text-align:center;justify-content:center;">Scan free</a>
+        </nav>
+    </header>
+
+<section class="result-hero">
+    <div class="result-hero-inner">
+        <div class="result-workflow" aria-label="Screening progress">
+            <div class="rw-step done"><span>1</span> Upload</div>
+            <div class="rw-line done"></div>
+            <div class="rw-step done"><span>2</span> Analyze</div>
+            <div class="rw-line done"></div>
+            <div class="rw-step active"><span>3</span> Report</div>
+            <div class="rw-line"></div>
+            <div class="rw-step"><span>4</span> Next steps</div>
+        </div>
+
+        <div class="result-hero-grid">
+            <div class="result-hero-main">
+                <div class="result-status-bar">
+                    <span class="dot"></span>
+                    Analysis complete
+                </div>
+                <h1>Detected: <span id="r-disease"></span></h1>
+                <div class="result-chips">
+                    <span class="chip">Confidence <strong id="r-confidence"></strong></span>
+                    <span class="chip">Severity <strong id="r-severity"></strong></span>
+                </div>
+            </div>
+            <div class="risk-tier-card" id="r-risk-tier-card">
+                <div class="risk-tier-label" id="r-risk-label"></div>
+                <div class="risk-tier-status" id="r-risk-status"></div>
+                <p class="risk-tier-desc" id="r-risk-desc"></p>
+                <p class="risk-tier-action" id="r-risk-action"></p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="result-metrics">
+    <div class="metrics-inner">
+        <div class="gauge-panel">
+            <div class="gauge-wrap">
+                <svg width="140" height="140" viewBox="0 0 210 210">
+                    <defs>
+                        <linearGradient id="gaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop id="r-gauge-fill-color-0" offset="0%" stop-color="#00B45E"/>
+                            <stop id="r-gauge-fill-color-1" offset="100%" stop-color="#34D399"/>
+                        </linearGradient>
+                    </defs>
+                    <circle fill="none" stroke="#e2e8f0" stroke-width="10" cx="105" cy="105" r="84"
+                        stroke-dasharray="328 527" transform="rotate(156 105 105)"/>
+                    <circle id="r-gauge-arc" fill="none" stroke="url(#gaugeGrad)" stroke-width="10" cx="105" cy="105" r="84"
+                        stroke-dasharray="0 527" stroke-linecap="round" transform="rotate(156 105 105)"/>
+                    <text id="r-gauge-num" x="105" y="99" text-anchor="middle" font-family="Inter,sans-serif" font-size="28" font-weight="700"
+                        fill="#00B45E">0%</text>
+                    <text x="105" y="122" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#94A3B8">CONFIDENCE</text>
+                </svg>
+            </div>
+            <p class="gauge-caption">Model confidence score</p>
+        </div>
+
+        <div class="metric-cards">
+            <div class="metric-card">
+                <div class="label">Predicted condition</div>
+                <div class="value accent" id="r-disease-metric"></div>
+                <div class="sub">Primary classification from image analysis.</div>
+            </div>
+            <div class="metric-card">
+                <div class="label">Cancer status</div>
+                <div class="value" id="r-cancer-status-label"></div>
+                <div class="sub" id="r-cancer-status-sub"></div>
+            </div>
+            <div class="metric-card">
+                <div class="label">Severity level</div>
+                <div class="value severity-value" id="r-severity-value"></div>
+                <div class="risk-meter" id="r-risk-meter">
+                    <div class="risk-meter-fill"></div>
+                </div>
+                <div class="sub">Based on visual patterns in your image.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="result-body">
+    <div class="report-grid">
+        <div class="report-card accent featured full">
+            <h3>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                Clinical finding
+            </h3>
+            <div class="report-content" id="r-finding"></div>
+        </div>
+
+        <div class="report-card info" id="r-visual-chars">
+            <h3>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                Visual characteristics
+            </h3>
+            <div class="report-content" id="r-visual-chars-text"></div>
+        </div>
+
+        <div class="report-card warning" id="r-conf-just">
+            <h3>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                Confidence details
+            </h3>
+            <div class="report-content" id="r-conf-just-text"></div>
+        </div>
+
+        <div class="report-card accent full" id="r-diff-diag">
+            <h3>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                Diagnostic reasoning
+            </h3>
+            <div class="report-content" id="r-diff-diag-text"></div>
+        </div>
+
+        <div class="report-card info">
+            <h3>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                Symptoms &amp; signs
+            </h3>
+            <div class="report-content" id="r-symptoms"></div>
+        </div>
+
+        <div class="report-card warning">
+            <h3>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+                Root causes &amp; risk factors
+            </h3>
+            <div class="report-content" id="r-root-causes"></div>
+        </div>
+
+        <div class="report-card safe">
+            <h3>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                Home care
+            </h3>
+            <div class="report-content" id="r-home-treatments"></div>
+        </div>
+
+        <div class="report-card info">
+            <h3>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                Medical treatment options
+            </h3>
+            <div class="report-content" id="r-medical-treatments"></div>
+        </div>
+
+        <div class="report-card safe">
+            <h3>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                Prevention tips
+            </h3>
+            <div class="report-content" id="r-prevention"></div>
+        </div>
+
+        <div class="report-card critical">
+            <h3>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+                Urgent warning signs
+            </h3>
+            <div class="report-content urgent" id="r-warning-signs"></div>
+        </div>
+
+        <div class="report-card accent full">
+            <h3>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                When to see a doctor
+            </h3>
+            <div class="report-content" id="r-when-doctor"></div>
+        </div>
+    </div>
+</div>
+
+<section class="result-footer-bar">
+    <div class="result-footer-inner">
+        <div class="result-disclaimer">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2" style="flex-shrink:0;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <div>
+                <strong>Important:</strong> For education and awareness only. Not a substitute for professional medical advice, diagnosis, or treatment. Always consult a board-certified dermatologist.
+            </div>
+        </div>
+        <div class="result-actions">
+            <a href="./index.html#scan" class="btn-green">Analyze another image</a>
+            <a href="./index.html" class="btn-outline">Back to home</a>
+        </div>
+    </div>
+</section>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div>
+                <a href="./index.html" class="logo" style="color:#fff;margin-bottom:16px;"><span class="logo-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>DermaStratif</a>
+                <p style="font-size:0.875rem;margin-top:12px;max-width:320px;">AI-assisted skin lesion stratification for education and early awareness. Not a substitute for professional diagnosis.</p>
+            </div>
+            <div class="footer-links">
+                <a href="./index.html#features">Features</a><a href="./index.html#mastery">Screening Flow</a><a href="./index.html#scan">Scan</a><a href="./about.html">About</a><a href="./index.html#faqs">FAQs</a>
+            </div>
+        </div>
+        <p class="footer-bottom">© 2026 DermaStratif. For educational and screening support only — always consult a board-certified dermatologist for clinical decisions.</p>
+    </footer>
+
+    <script src="./config.js"></script>
+    <script src="./app.js"></script>
+    <script>
+    (function () {
+        // Read result from localStorage
+        var raw = localStorage.getItem('derma_result');
+        if (!raw) {
+            window.location.href = './index.html';
+            return;
+        }
+
+        var data;
+        try {
+            data = JSON.parse(raw);
+        } catch (e) {
+            window.location.href = './index.html';
+            return;
+        }
+
+        // Set text content of an element by id
+        function setText(id, value) {
+            var el = document.getElementById(id);
+            if (el && value != null) el.textContent = value;
+        }
+
+        // Show or hide a card element by id
+        function showCard(id, show) {
+            var el = document.getElementById(id);
+            if (el) el.style.display = show ? '' : 'none';
+        }
+
+        var disease      = data.predicted_disease || '';
+        var confidence   = data.confidence || '';
+        var severity     = data.severity || '';
+        var riskTier     = (data.risk_tier || 'low').toLowerCase();
+        var isCanc       = data.is_cancer;
+        var cancerStatus = data.cancer_status || '';
+
+        // Update page title
+        document.title = 'Analysis Result \u2014 ' + disease + ' | DermaStratif';
+
+        // Hero disease / confidence / severity chips
+        setText('r-disease', disease);
+        setText('r-confidence', confidence);
+        setText('r-severity', severity);
+
+        // Risk tier card class
+        var riskCard = document.getElementById('r-risk-tier-card');
+        if (riskCard) {
+            riskCard.className = 'risk-tier-card risk-' + riskTier;
+        }
+
+        // Risk label
+        var riskLabelMap = { high: 'High risk', moderate: 'Moderate risk', low: 'Low risk' };
+        setText('r-risk-label', riskLabelMap[riskTier] || 'Low risk');
+
+        // Risk status text (malignant / precancerous / benign)
+        var riskStatus;
+        if (isCanc) {
+            riskStatus = 'Malignant concern';
+        } else if (cancerStatus.indexOf('Precancerous') !== -1) {
+            riskStatus = 'Precancerous';
+        } else {
+            riskStatus = 'Benign';
+        }
+        setText('r-risk-status', riskStatus);
+        setText('r-risk-desc', cancerStatus);
+
+        // Risk action text
+        var riskActionMap = {
+            high:     'Schedule dermatology evaluation promptly.',
+            moderate: 'Professional follow-up recommended.',
+            low:      'Monitor \u00b7 routine check if changes occur.'
+        };
+        setText('r-risk-action', riskActionMap[riskTier] || riskActionMap.low);
+
+        // Gauge gradient and text colors per tier
+        var tierColors = {
+            high:     { start: '#DC2626', end: '#F87171', text: '#DC2626' },
+            moderate: { start: '#D97706', end: '#FCD34D', text: '#D97706' },
+            low:      { start: '#00B45E', end: '#34D399', text: '#00B45E' }
+        };
+        var colors = tierColors[riskTier] || tierColors.low;
+
+        var stop0 = document.getElementById('r-gauge-fill-color-0');
+        var stop1 = document.getElementById('r-gauge-fill-color-1');
+        var gaugeNumEl = document.getElementById('r-gauge-num');
+        if (stop0) stop0.setAttribute('stop-color', colors.start);
+        if (stop1) stop1.setAttribute('stop-color', colors.end);
+        if (gaugeNumEl) gaugeNumEl.setAttribute('fill', colors.text);
+
+        // Metric cards
+        setText('r-disease-metric', disease);
+
+        var cancerLabel;
+        if (isCanc) {
+            cancerLabel = 'Malignant';
+        } else if (cancerStatus.indexOf('Precancerous') !== -1) {
+            cancerLabel = 'Precancerous';
+        } else {
+            cancerLabel = 'Benign';
+        }
+        var cancerLabelEl = document.getElementById('r-cancer-status-label');
+        if (cancerLabelEl) {
+            cancerLabelEl.textContent = cancerLabel;
+            cancerLabelEl.className = 'value ' + (riskTier === 'high' ? 'critical' : riskTier === 'moderate' ? 'warning' : 'safe');
+        }
+        setText('r-cancer-status-sub', cancerStatus);
+        setText('r-severity-value', severity);
+
+        var riskMeter = document.getElementById('r-risk-meter');
+        if (riskMeter) riskMeter.className = 'risk-meter risk-' + riskTier;
+
+        // Always-visible report card content
+        setText('r-finding',           data.finding_explanation   || '');
+        setText('r-symptoms',          data.detailed_symptoms      || '');
+        setText('r-root-causes',       data.root_causes            || '');
+        setText('r-home-treatments',   data.home_treatments        || '');
+        setText('r-medical-treatments',data.medical_treatments     || '');
+        setText('r-prevention',        data.prevention_tips        || '');
+        setText('r-warning-signs',     data.urgent_warning_signs   || '');
+        setText('r-when-doctor',       data.when_to_see_doctor     || '');
+
+        // Conditionally visible cards
+        var visualChars = data.visual_characteristics || '';
+        showCard('r-visual-chars', !!visualChars);
+        setText('r-visual-chars-text', visualChars);
+
+        var confJust = data.confidence_justification || '';
+        showCard('r-conf-just', !!confJust);
+        setText('r-conf-just-text', confJust);
+
+        var diffDiag = data.differential_diagnosis_notes || data.differential_diagnosis || '';
+        showCard('r-diff-diag', !!diffDiag);
+        setText('r-diff-diag-text', diffDiag);
+
+        // SVG gauge animation
+        var match = confidence.match(/[\d.]+/);
+        if (match) {
+            var pct = Math.min(100, Math.max(0, parseFloat(match[0])));
+            var arcLen = 328, circ = 527;
+            var fill = document.getElementById('r-gauge-arc');
+            var numEl = document.getElementById('r-gauge-num');
+            var duration = 1200;
+            var startTs = null;
+            function ease(t) { return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2, 3)/2; }
+            function step(ts) {
+                if (!startTs) startTs = ts;
+                var t = Math.min(1, (ts - startTs) / duration);
+                var val = ease(t) * pct;
+                var drawn = (val / 100) * arcLen;
+                if (fill) fill.setAttribute('stroke-dasharray', drawn + ' ' + (circ - drawn));
+                if (numEl) numEl.textContent = Math.round(val) + '%';
+                if (t < 1) {
+                    requestAnimationFrame(step);
+                } else {
+                    if (numEl) numEl.textContent = pct + (confidence.indexOf('%') !== -1 ? '%' : '');
+                }
+            }
+            requestAnimationFrame(step);
+        }
+    })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DermaStratif — AI Skin Cancer Stratification Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="nav-inner">
+            <a href="./index.html" class="logo"><span class="logo-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>DermaStratif</a>
+            <nav class="nav-links" aria-label="Main">
+                <a href="#features">Features</a><a href="#mastery">Screening Flow</a><a href="#scan">Scan</a><a href="#faqs">FAQs</a><a href="./about.html">About</a>
+            </nav>
+            <div class="nav-actions">
+                <a href="./about.html" class="btn-outline">About</a>
+                <a href="#scan" class="btn-green">Scan free</a>
+            </div>
+            <button type="button" class="nav-toggle" id="navToggle" aria-label="Open menu"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+        </div>
+        <nav class="mobile-nav" id="mobileNav" aria-label="Mobile">
+            <a href="#features">Features</a><a href="#mastery">Screening Flow</a><a href="#scan">Scan a Lesion</a><a href="#faqs">FAQs</a><a href="./about.html">About</a>
+            <a href="#scan" class="btn-green" style="margin-top:12px;text-align:center;justify-content:center;">Scan free</a>
+        </nav>
+    </header>
+
+<section class="hero">
+    <div class="hero-grid">
+        <div>
+            <h1>The All-In-One AI Skin Cancer Awareness Platform</h1>
+            <p class="hero-lead">DermaStratif transforms dermatoscopic images into instant AI-assisted classification across 8 lesion types — with clinical explanations, risk stratification, and actionable next steps.</p>
+            <a href="./about.html" class="hero-callout">
+                <span>EfficientNet-LoRA multiclass model — read how DermaStratif works</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <a href="#scan" class="btn-green btn-green-lg">Start screening free <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        </div>
+        <div class="mockup-wrap">
+            <div class="device-frame"><div class="device-screen">
+                <div class="mock-panel active" id="mock-report"><img src="./images/hero-report-preview.png" alt="AI clinical report preview" class="mock-report-img" width="1024" height="530" loading="eager"></div>
+                <div class="mock-panel" id="mock-library"><div class="mock-rich"><div class="mock-rich-head"><span class="mock-rich-title">Disease Library</span><span class="mock-rich-badge">8 classes</span></div><div class="mock-lib-grid"><div class="mock-lib-card high"><span>M</span><strong>Melanoma</strong><em>High</em></div><div class="mock-lib-card high"><span>S</span><strong>SCC</strong><em>High</em></div><div class="mock-lib-card mod"><span>B</span><strong>BCC</strong><em>Mod</em></div><div class="mock-lib-card mod"><span>A</span><strong>Actinic K.</strong><em>Mod</em></div><div class="mock-lib-card low"><span>N</span><strong>Nevus</strong><em>Low</em></div><div class="mock-lib-card low"><span>K</span><strong>Benign K.</strong><em>Low</em></div><div class="mock-lib-card low"><span>D</span><strong>Dermafib.</strong><em>Low</em></div><div class="mock-lib-card low"><span>V</span><strong>Vascular</strong><em>Low</em></div></div></div></div>
+                <div class="mock-panel" id="mock-abcde"><div class="mock-rich mock-abcde-wrap"><div class="mock-rich-head"><span class="mock-rich-title">ABCDE Self-Check</span><span class="mock-rich-badge">Mole guide</span></div><div class="mock-abcde-grid"><div class="mock-abcde-item"><b>A</b><span>Asymmetry</span><p>Halves don't match</p></div><div class="mock-abcde-item"><b>B</b><span>Border</span><p>Irregular edges</p></div><div class="mock-abcde-item"><b>C</b><span>Color</span><p>Multiple shades</p></div><div class="mock-abcde-item"><b>D</b><span>Diameter</span><p>Larger than 6mm</p></div><div class="mock-abcde-item wide"><b>E</b><span>Evolution</span><p>Changing size, shape, or color over time</p></div></div></div></div>
+                <div class="mock-panel" id="mock-risk"><div class="mock-rich"><div class="mock-rich-head"><span class="mock-rich-title">Risk Levels</span><span class="mock-rich-badge">Stratification</span></div><div class="mock-risk-stack"><div class="mock-risk-tier tier-high"><div class="tier-label">High risk</div><p>Melanoma, Squamous cell carcinoma</p><span class="tier-action">Urgent dermatology referral</span></div><div class="mock-risk-tier tier-mod"><div class="tier-label">Moderate</div><p>BCC, Actinic keratosis (precancerous)</p><span class="tier-action">Schedule evaluation soon</span></div><div class="mock-risk-tier tier-low"><div class="tier-label">Low risk</div><p>Nevus, benign keratosis, dermatofibroma, vascular</p><span class="tier-action">Monitor · routine follow-up</span></div></div></div></div>
+                <div class="mock-panel" id="mock-flow"><div class="mock-rich mock-flow-wrap"><div class="mock-rich-head"><span class="mock-rich-title">Screening Workflow</span><span class="mock-rich-badge">4 steps</span></div><div class="mock-pipeline"><div class="mock-pipe-step done"><div class="pipe-icon">1</div><strong>Upload</strong><span>Clear lesion photo</span></div><div class="mock-pipe-arrow"></div><div class="mock-pipe-step done"><div class="pipe-icon">2</div><strong>Validate</strong><span>Image quality check</span></div><div class="mock-pipe-arrow"></div><div class="mock-pipe-step active"><div class="pipe-icon">3</div><strong>Analyze</strong><span>AI classification</span></div><div class="mock-pipe-arrow"></div><div class="mock-pipe-step"><div class="pipe-icon">4</div><strong>Report</strong><span>Clinical summary</span></div></div></div></div>
+            </div></div>
+            <div class="feature-pills">
+                <button type="button" class="feature-pill active" data-mock="report">AI Report</button>
+                <button type="button" class="feature-pill" data-mock="library">Disease Library</button>
+                <button type="button" class="feature-pill" data-mock="abcde">ABCDE Guide</button>
+                <button type="button" class="feature-pill" data-mock="risk">Risk Levels</button>
+                <button type="button" class="feature-pill" data-mock="flow">Workflow</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section" id="audience">
+    <div class="section-inner">
+        <h2>DermaStratif is built for…</h2>
+        <div class="audience-grid">
+            <div class="audience-card"><div class="audience-avatar">P</div><h3>Patients &amp; Public</h3><p>Understand whether a spot may need professional evaluation — with plain-language explanations and when to seek care.</p></div>
+            <div class="audience-card"><div class="audience-avatar">S</div><h3>Medical Students</h3><p>Practice recognizing lesion patterns across 8 dermatological categories with AI-generated differential reasoning.</p></div>
+            <div class="audience-card"><div class="audience-avatar">D</div><h3>Dermatology Clinics</h3><p>Pre-screening support and structured reports to complement — never replace — clinical examination and biopsy.</p></div>
+            <div class="audience-card"><div class="audience-avatar">R</div><h3>Researchers &amp; Educators</h3><p>Demonstrate multiclass lesion stratification with deep learning and structured clinical narratives.</p></div>
+        </div>
+        <p class="audience-tagline">Perfect for skin self-checks, dermatology education, early awareness, and building confidence before a professional visit.</p>
+    </div>
+</section>
+
+<section class="trust-band">
+    <h5>Top 5 in US university health-tech competitions</h5>
+    <p class="trust-sub">Recognized for innovation in dermatology screening and medical imaging</p>
+    <div class="stats-row">
+        <div class="stat-item"><h4>8</h4><p>Lesion classes classified</p></div>
+        <div class="stat-item"><h4>95%</h4><p>Validation accuracy · F1 93%</p></div>
+        <div class="stat-item"><h4>12+</h4><p>Clinical report sections</p></div>
+        <div class="stat-item"><h4>&lt;30s</h4><p>Typical analysis time</p></div>
+    </div>
+</section>
+
+<section class="section section-dark" id="features">
+    <div class="section-inner features-layout">
+        <div>
+            <span class="section-eyebrow light">Application Features</span>
+            <h2><em>Evidence-informed</em> AI for skin lesion stratification &amp; education</h2>
+        </div>
+        <div class="feature-list">
+            <a href="#scan" class="feature-item"><div class="feature-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div><div><h5>Lesion Scanner ↗</h5><p>Upload a close-up dermatological image and receive instant multiclass classification with confidence scoring.</p></div></a>
+            <div class="feature-item"><div class="feature-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><div><h5>Clinical AI Report</h5><p>Generates finding explanations, visual characteristics, treatments, prevention, and urgent warning signs in one view.</p></div></div>
+            <div class="feature-item"><div class="feature-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div><div><h5>Disease Library</h5><p>Explore all 8 supported conditions — from melanoma and carcinomas to benign nevi and keratoses.</p></div></div>
+            <div class="feature-item"><div class="feature-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div><h5>Risk Stratification</h5><p>Each result maps to high, moderate, or low risk with clear guidance on precancerous vs malignant vs benign findings.</p></div></div>
+            <div class="feature-item"><div class="feature-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/></svg></div><div><h5>ABCDE Self-Check</h5><p>Built-in educational framing around asymmetry, border, color, diameter, and evolution for mole monitoring.</p></div></div>
+            <div class="tutor-card"><div><h4>Derma AI Assistant</h4><p>Explains why your lesion was classified — referencing color, border, texture, and patterns in your upload. Backed by EfficientNet-LoRA when additional analysis is needed.</p></div><div class="tutor-orb" aria-hidden="true">AI</div></div>
+        </div>
+    </div>
+</section>
+
+<section class="section flow-section" id="mastery">
+    <div class="section-inner">
+        <span class="section-eyebrow">Screening Flow</span>
+        <h2>From first photo to clinical clarity</h2>
+        <p class="section-lead">A guided four-stage path — built for skin cancer awareness, not diagnosis replacement.</p>
+        <div class="flow-rail" aria-hidden="true">
+            <div class="flow-rail-line"><div class="flow-rail-progress"></div></div>
+            <div class="flow-rail-steps">
+                <button type="button" class="flow-rail-btn active" data-mastery="learn"><span>01</span>Learn</button>
+                <button type="button" class="flow-rail-btn" data-mastery="recognize"><span>02</span>Recognize</button>
+                <button type="button" class="flow-rail-btn" data-mastery="screen"><span>03</span>Screen</button>
+                <button type="button" class="flow-rail-btn" data-mastery="consult"><span>04</span>Consult</button>
+            </div>
+        </div>
+        <div class="flow-stage active" id="mastery-learn" data-step="1"><div class="flow-stage-content"><div class="flow-stage-icon learn"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><div><h3>Learn the fundamentals</h3><p>Understand eight lesion categories, UV risk factors, and the ABCDE framework before you upload anything.</p><ul class="flow-bullets"><li>Melanoma, BCC, SCC — highest vigilance</li><li>Actinic keratosis — precancerous monitoring</li><li>Benign classes — nevi, keratoses, vascular, dermatofibroma</li></ul></div></div><div class="flow-stage-visual"><div class="flow-chip-row"><span class="flow-chip danger">Melanoma</span><span class="flow-chip danger">SCC</span><span class="flow-chip warn">BCC</span><span class="flow-chip warn">Actinic K.</span><span class="flow-chip safe">Nevus</span><span class="flow-chip safe">Benign</span></div></div></div>
+        <div class="flow-stage" id="mastery-recognize" data-step="2"><div class="flow-stage-content"><div class="flow-stage-icon recognize"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div><div><h3>Recognize visual patterns</h3><p>Compare your lesion against reference severity tiers. Know what high-risk asymmetry and irregular borders look like.</p><ul class="flow-bullets"><li>High — irregular borders, color variation</li><li>Moderate — scaly patches, pearly bumps</li><li>Low — stable symmetric moles</li></ul></div></div><div class="flow-stage-visual"><div class="flow-compare"><div class="flow-compare-card high"><strong>High risk</strong><p>Melanoma · SCC</p></div><div class="flow-compare-card mod"><strong>Moderate</strong><p>BCC · Actinic K.</p></div><div class="flow-compare-card low"><strong>Low risk</strong><p>Nevus · Benign</p></div></div></div></div>
+        <div class="flow-stage" id="mastery-screen" data-step="3"><div class="flow-stage-content"><div class="flow-stage-icon screen"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div><div><h3>Screen with AI</h3><p>Upload a clear, well-lit close-up. We validate image quality, classify across eight classes, and build your full clinical report.</p><a href="#scan" class="btn-green" style="margin-top:16px;">Upload &amp; analyze</a></div></div><div class="flow-stage-visual"><div class="flow-upload-preview"><div class="flow-upload-step done">✓ Quality check</div><div class="flow-upload-step done">✓ Classification</div><div class="flow-upload-step active">→ Full report</div></div></div></div>
+        <div class="flow-stage" id="mastery-consult" data-step="4"><div class="flow-stage-content"><div class="flow-stage-icon consult"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div><div><h3>Consult a dermatologist</h3><p>Every report includes when to seek care and urgent warning signs. AI supports awareness — biopsy and exam confirm diagnosis.</p><div class="flow-alert"><strong>Seek immediate care if:</strong> bleeding, rapid growth, color change, or new symptoms.</div></div></div><div class="flow-stage-visual"><img src="./images/hero-report-preview.png" alt="Sample clinical report" class="flow-report-thumb"></div></div>
+    </div>
+</section>
+
+<section class="section cta-band"><div class="section-inner"><h2>DermaStratif supports lifelong skin health awareness</h2><h6>Learn, screen, and track concerns — always pair AI insights with professional dermatology care.</h6><div class="cta-points"><p>Multiclass deep learning trained on dermatoscopic patterns across 8 diagnosis categories.</p><p>Rich clinical narratives: symptoms, causes, treatments, prevention, and differential notes.</p></div><a href="#scan" class="btn-green btn-green-lg">Scan a lesion now</a></div></section>
+
+<section class="section" id="scan">
+    <div class="section-inner" style="text-align:center;">
+        <span class="section-eyebrow">Lesion Scanner</span>
+        <h2>Upload &amp; analyze a skin lesion</h2>
+        <p class="section-lead" style="margin:0 auto 0;">Clear, close-up JPG or PNG — max 10 MB. Results in seconds.</p>
+        <div class="scan-box">
+            <form id="uploadForm">
+                <div class="upload-area" id="uploadArea">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.5" style="margin:0 auto 16px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    <p style="font-weight:600;margin-bottom:8px;">Drop your image here</p>
+                    <p style="font-size:0.875rem;color:var(--text-muted);margin-bottom:16px;">JPG · PNG · Max 10 MB</p>
+                    <label class="btn-green" for="file" style="cursor:pointer;">Select image</label>
+                    <input type="file" id="file" name="file" accept="image/*" required>
+                </div>
+                <div class="preview-container" id="previewContainer">
+                    <img id="previewImage" alt="Preview">
+                    <p id="fileName" style="font-size:0.8125rem;color:var(--text-muted);margin-top:8px;"></p>
+                </div>
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p style="font-size:0.875rem;color:var(--green);font-weight:600;">Analyzing lesion…</p>
+                </div>
+                <button type="submit" class="btn-green analyze-btn" id="submitBtn" disabled>Run AI analysis</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<section class="section" id="classes">
+    <div class="section-inner">
+        <h2>8 stratification classes</h2>
+        <div class="disease-grid">
+            <div class="disease-card"><img src="./images/melanoma.png" alt="Melanoma" loading="lazy" onerror="this.style.display='none'"><div><div style="display:flex;align-items:flex-start;gap:8px;"><h3>Melanoma</h3><span class="badge badge-high">High</span></div><p>Aggressive melanocytic malignancy requiring urgent evaluation.</p></div></div>
+            <div class="disease-card"><img src="./images/Squamous Cell Carcinoma.png" alt="SCC" loading="lazy" onerror="this.style.display='none'"><div><div style="display:flex;align-items:flex-start;gap:8px;"><h3>Squamous Cell Carcinoma</h3><span class="badge badge-high">High</span></div><p>Can metastasize if untreated.</p></div></div>
+            <div class="disease-card"><img src="./images/Basal Cell Carcinoma.png" alt="BCC" loading="lazy" onerror="this.style.display='none'"><div><div style="display:flex;align-items:flex-start;gap:8px;"><h3>Basal Cell Carcinoma</h3><span class="badge badge-moderate">Moderate</span></div><p>Locally invasive; rarely metastasizes.</p></div></div>
+            <div class="disease-card"><img src="./images/Actinic Keratosis.png" alt="Actinic Keratosis" loading="lazy" onerror="this.style.display='none'"><div><div style="display:flex;align-items:flex-start;gap:8px;"><h3>Actinic Keratosis</h3><span class="badge badge-moderate">Moderate</span></div><p>Precancerous UV-related lesion.</p></div></div>
+            <div class="disease-card"><img src="./images/Benign Keratosis.png" alt="Benign Keratosis" loading="lazy" onerror="this.style.display='none'"><div><div style="display:flex;align-items:flex-start;gap:8px;"><h3>Benign Keratosis</h3><span class="badge badge-low">Low</span></div><p>Non-cancerous age-related growth.</p></div></div>
+            <div class="disease-card"><img src="./images/Dermatofibroma.png" alt="Dermatofibroma" loading="lazy" onerror="this.style.display='none'"><div><div style="display:flex;align-items:flex-start;gap:8px;"><h3>Dermatofibroma</h3><span class="badge badge-low">Low</span></div><p>Benign fibrous nodule.</p></div></div>
+            <div class="disease-card"><img src="./images/Vascular Lesion.png" alt="Vascular" loading="lazy" onerror="this.style.display='none'"><div><div style="display:flex;align-items:flex-start;gap:8px;"><h3>Vascular Lesion</h3><span class="badge badge-low">Low</span></div><p>Blood vessel anomalies.</p></div></div>
+            <div class="disease-card"><img src="./images/Melanocytic Nevus.png" alt="Nevus" loading="lazy" onerror="this.style.display='none'"><div><div style="display:flex;align-items:flex-start;gap:8px;"><h3>Melanocytic Nevus</h3><span class="badge badge-low">Low</span></div><p>Common mole — monitor for changes.</p></div></div>
+        </div>
+        <div class="disclaimer-inline"><strong>Clinical disclaimer:</strong> For education and preliminary screening only. Not FDA-approved. Does not replace histopathology or a board-certified dermatologist. Always seek qualified medical evaluation.</div>
+    </div>
+</section>
+
+<section class="section" id="faqs">
+    <div class="section-inner">
+        <h2>Frequently asked questions</h2>
+        <div class="faq-list">
+            <div class="faq-item open"><button type="button" class="faq-q"><span class="faq-num">01</span>What is DermaStratif?<svg class="faq-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-a">DermaStratif is an AI-assisted platform that classifies skin lesion images into eight dermatological categories and generates educational clinical reports to support awareness and early conversations with healthcare providers.</div></div>
+            <div class="faq-item"><button type="button" class="faq-q"><span class="faq-num">02</span>How accurate is the AI?<svg class="faq-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-a">DermaStratif uses multimodal image analysis with an EfficientNet-LoRA classifier as backup. Confidence scores reflect model certainty but cannot guarantee clinical accuracy — professional diagnosis is essential.</div></div>
+            <div class="faq-item"><button type="button" class="faq-q"><span class="faq-num">03</span>What images work best?<svg class="faq-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-a">Upload a clear, well-lit, in-focus close-up of the skin lesion in JPG or PNG format, under 10 MB. Avoid blurry photos, non-skin images, or heavily filtered pictures.</div></div>
+            <div class="faq-item"><button type="button" class="faq-q"><span class="faq-num">04</span>Can this replace a dermatologist?<svg class="faq-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-a">No. DermaStratif is an educational and awareness tool only. Biopsy and examination by a qualified dermatologist remain the standard for definitive diagnosis and treatment.</div></div>
+            <div class="faq-item"><button type="button" class="faq-q"><span class="faq-num">05</span>Which conditions can it detect?<svg class="faq-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-a">Melanoma, basal cell carcinoma, squamous cell carcinoma, actinic keratosis, benign keratosis, dermatofibroma, vascular lesions, and melanocytic nevus — with risk level and detailed report sections for each.</div></div>
+        </div>
+    </div>
+</section>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div>
+                <a href="./index.html" class="logo" style="color:#fff;margin-bottom:16px;"><span class="logo-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>DermaStratif</a>
+                <p style="font-size:0.875rem;margin-top:12px;max-width:320px;">AI-assisted skin lesion stratification for education and early awareness. Not a substitute for professional diagnosis.</p>
+            </div>
+            <div class="footer-links">
+                <a href="#features">Features</a><a href="#mastery">Screening Flow</a><a href="#scan">Scan</a><a href="./about.html">About</a><a href="#faqs">FAQs</a>
+            </div>
+        </div>
+        <p class="footer-bottom">© 2026 DermaStratif. For educational and screening support only — always consult a board-certified dermatologist for clinical decisions.</p>
+    </footer>
+
+    <script src="./config.js"></script>
+    <script src="./app.js"></script>
+</body>
+</html>
