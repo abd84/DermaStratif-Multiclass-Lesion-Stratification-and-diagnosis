@@ -1,4 +1,5 @@
 import os
+import io
 import logging
 import json
 from flask import Flask, request, render_template, url_for, jsonify
@@ -97,7 +98,10 @@ Return ONLY a valid JSON object — no markdown, no preamble, no trailing text:
     "confidence_justification": "<Brief explanation of the confidence level given>"
 }"""
 
-        response = vision_model.generate_content([prompt, image])
+        buf = io.BytesIO()
+        image.save(buf, format="JPEG")
+        image_part = {"mime_type": "image/jpeg", "data": buf.getvalue()}
+        response = vision_model.generate_content([prompt, image_part])
         text = response.text.strip()
 
         # Strip markdown code fences if present
