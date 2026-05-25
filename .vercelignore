@@ -1,0 +1,6 @@
+Notebooks/
+Model Training Scripts/
+.github/
+.playwright-mcp/
+Application/.claude/
+*.ipynb_checkpoints
