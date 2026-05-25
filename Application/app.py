@@ -1,10 +1,11 @@
 import os
 import io
+import base64
 import logging
 import json
+import requests as http_requests
 from flask import Flask, request, render_template, url_for, jsonify
 from PIL import Image
-import google.generativeai as genai
 from dotenv import load_dotenv
 
 # ── Logging setup ──────────────────────────────────────────────────────────────
@@ -20,7 +21,6 @@ load_dotenv()
 
 VISION_API_KEY = os.getenv("VISION_API_KEY") or os.getenv("GEMINI_API_KEY")
 if VISION_API_KEY:
-    genai.configure(api_key=VISION_API_KEY)
     log.info("Vision analysis key loaded successfully")
 else:
     log.warning("Vision API key not found — analysis will be unavailable")
@@ -57,13 +57,9 @@ def risk_tier_from_analysis(is_cancer, cancer_status):
     return "low"
 
 
-def get_vision_analysis(image):
-    """Analyze the skin lesion image via Gemini and return a clinical assessment dict, or None on failure."""
-    log.info("[AI] Starting vision analysis")
-    try:
-        vision_model = genai.GenerativeModel('gemini-2.5-flash')
+GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"
 
-        prompt = """You are a board-certified dermatology AI expert. Carefully analyze this skin lesion image and provide a complete clinical assessment.
+PROMPT = """You are a board-certified dermatology AI expert. Carefully analyze this skin lesion image and provide a complete clinical assessment.
 
 CLASSIFICATION RULE: You MUST classify the lesion into EXACTLY ONE of these 8 categories — no others:
   - Melanoma
@@ -98,21 +94,44 @@ Return ONLY a valid JSON object — no markdown, no preamble, no trailing text:
     "confidence_justification": "<Brief explanation of the confidence level given>"
 }"""
 
+
+def get_vision_analysis(image):
+    """Analyze the skin lesion image via Gemini REST API. Returns a dict or None on failure."""
+    log.info("[AI] Starting vision analysis")
+    if not VISION_API_KEY:
+        log.error("[AI] No API key configured")
+        return None
+    try:
         buf = io.BytesIO()
         image.save(buf, format="JPEG")
-        image_part = {"mime_type": "image/jpeg", "data": buf.getvalue()}
-        response = vision_model.generate_content([prompt, image_part])
-        text = response.text.strip()
+        image_b64 = base64.b64encode(buf.getvalue()).decode("utf-8")
 
-        # Strip markdown code fences if present
-        if text.startswith('```'):
-            lines = text.split('\n')
-            text = '\n'.join(lines[1:-1] if lines[-1].strip() == '```' else lines[1:])
+        payload = {
+            "contents": [{
+                "parts": [
+                    {"text": PROMPT},
+                    {"inline_data": {"mime_type": "image/jpeg", "data": image_b64}}
+                ]
+            }]
+        }
+
+        resp = http_requests.post(
+            GEMINI_API_URL,
+            params={"key": VISION_API_KEY},
+            headers={"Content-Type": "application/json"},
+            json=payload,
+            timeout=55
+        )
+        resp.raise_for_status()
+
+        text = resp.json()["candidates"][0]["content"]["parts"][0]["text"].strip()
+
+        if text.startswith("```"):
+            lines = text.split("\n")
+            text = "\n".join(lines[1:-1] if lines[-1].strip() == "```" else lines[1:])
 
         analysis = json.loads(text)
-        disease = analysis.get("predicted_disease", "Unknown")
-        conf    = analysis.get("confidence", "?")
-        log.info(f"[AI] Success — {disease} ({conf} confidence)")
+        log.info(f"[AI] Success — {analysis.get('predicted_disease')} ({analysis.get('confidence')})")
         return analysis
 
     except json.JSONDecodeError as e:
